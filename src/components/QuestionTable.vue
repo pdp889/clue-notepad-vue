@@ -43,7 +43,6 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import { useCardStore } from '@/stores/cardStore'

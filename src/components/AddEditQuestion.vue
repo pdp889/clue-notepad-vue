@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useCardStore } from '@/stores/cardStore'
 
 const emit = defineEmits(['questionUpdated'])

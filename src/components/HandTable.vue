@@ -1,36 +1,48 @@
 <template>
   <div class="card">
-    <AddEditHand title="Add" @hand-updated="addHand"></AddEditHand>
-    <DataTable :value="hands" tableStyle="min-width: 50rem">
-      <Column field="playerName" header="Player Name"></Column>
-      <Column field="cardCount" header="Card Count"></Column>
-      <Column field="cards" header="Cards">
-        <template #body="{ data }">
-          <!-- <div v-for="(card, i) in data.cardTypes" v-bind:key="'card-' + i">
-            <Chip :label="cardStore.cardLabelLookup[card]"></Chip>
-          </div> -->
-          <div v-for="(card, i) in data.cards" v-bind:key="'card-' + i">
-            <Chip :label="cardStore.cardLabelLookup[card]"></Chip>
-          </div>
-        </template>
-      </Column>
-      <Column field="actions" header="Actions">
-        <template #body="{ data }">
-          <AddEditHand title="Edit" @hand-updated="editHand" :hand="data"></AddEditHand>
-          <Button @click="deleteHand(data.id)" label="Delete" severity="danger"></Button>
-        </template>
-      </Column>
-    </DataTable>
+    <Card>
+      <template #title>
+        <div class="flex align-items-center justify-content-between">
+          <span>Hands</span>
+          <AddEditHand isAdd @hand-updated="addHand"></AddEditHand>
+        </div>
+      </template>
+      <template #content>
+        <DataTable :value="hands" tableStyle="width: 100%">
+          <Column field="playerName" header="Player Name"></Column>
+          <Column field="cardCount" header="Card Count"></Column>
+          <Column field="cards" header="Cards">
+            <template #body="{ data }">
+              <div v-for="(card, i) in data.cards" v-bind:key="'card-' + i">
+                <Chip :label="cardStore.cardLabelLookup[card]" class="mb-1"></Chip>
+              </div>
+            </template>
+          </Column>
+          <Column field="actions" header="Actions" class="w-2">
+            <template #body="{ data }">
+              <div class="flex align-items-center justify-content-end gap-2">
+                <AddEditHand @hand-updated="editHand" :hand="data"></AddEditHand>
+                <Button
+                  @click="deleteHand(data.id)"
+                  severity="danger"
+                  :icon="PrimeIcons.TRASH"
+                ></Button>
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script setup>
-import { defineEmits } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import HandService from '@/services/hand.service'
 import AddEditHand from './AddEditHand.vue'
 import { useCardStore } from '@/stores/cardStore'
+import { PrimeIcons } from '@primevue/core/api'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -59,7 +71,6 @@ const deleteHand = (handId) => {
     rejectLabel: 'Cancel',
     acceptLabel: 'Delete',
     header: 'Confirmation',
-    icon: 'pi pi-info-circle',
     acceptProps: {
       label: 'Delete',
       severity: 'danger',

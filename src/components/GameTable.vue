@@ -1,27 +1,33 @@
 <template>
-  <div class="card">
+  <div>
     <Toast />
     <Card>
-      <template #title
-        >Games <AddEditGame title="Add" @gameUpdated="addGame"></AddEditGame>
+      <template #title>
+        <div class="flex align-items-center justify-content-between">
+          <span>Games</span>
+          <AddEditGame isAdd @gameUpdated="addGame"></AddEditGame>
+        </div>
       </template>
       <template #content>
         <DataTable :value="games" tableStyle="width: 100%">
           <Column field="name" header="Name"></Column>
-          <Column field="id" header="Open">
+          <Column field="actions" header="Actions" class="w-2">
             <template #body="{ data }">
-              <RouterLink :to="'/game/' + data.id">Open</RouterLink>
-            </template>
-          </Column>
-          <Column field="actions" header="Actions">
-            <template #body="{ data }">
-              <Button @click="deleteGame(data.id)" label="Delete" severity="danger"></Button>
+              <div class="flex align-items-center justify-content-end gap-2">
+                <RouterLink :to="'/game/' + data.id">
+                  <Button label="Open" :icon="PrimeIcons.ARROW_UP_RIGHT" icon-pos="right" />
+                </RouterLink>
+                <Button
+                  @click="deleteGame(data)"
+                  severity="danger"
+                  :icon="PrimeIcons.TRASH"
+                ></Button>
+              </div>
             </template>
           </Column>
         </DataTable>
       </template>
     </Card>
-
     <ConfirmDialog></ConfirmDialog>
   </div>
 </template>
@@ -33,6 +39,7 @@ import AddEditGame from './AddEditGame.vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import { RouterLink } from 'vue-router'
+import { PrimeIcons } from '@primevue/core/api'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -44,27 +51,27 @@ const fetchGames = async () => {
 
 const addGame = async (game) => {
   await GameService.create(game)
+  toast.add({ severity: 'success', summary: 'Game Added', life: 3000 })
   fetchGames()
 }
 
-const deleteGame = (gameId) => {
+const deleteGame = (game) => {
   confirm.require({
     message: 'Do you want to delete this game?',
     rejectLabel: 'Cancel',
     acceptLabel: 'Delete',
-    header: 'Confirmation',
-    icon: 'pi pi-info-circle',
+    header: `Delete ${game.name}`,
     acceptProps: {
       label: 'Delete',
       severity: 'danger',
     },
-    accept: () => deleteGameConfirmed(gameId),
+    accept: () => deleteGameConfirmed(game.id),
   })
 }
 
 const deleteGameConfirmed = async (gameId) => {
   await GameService.delete(gameId)
-  toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 })
+  toast.add({ severity: 'success', summary: 'Game Deleted', life: 3000 })
   fetchGames()
 }
 

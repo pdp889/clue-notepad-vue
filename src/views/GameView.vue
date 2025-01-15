@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <RouterLink to="/">Home</RouterLink>
+  <div class="p-1 m-auto w-3 min-w-min">
     <GameTabs :game-id="gameId" />
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
