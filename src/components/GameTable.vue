@@ -25,6 +25,11 @@
               </div>
             </template>
           </Column>
+          <template #empty
+            ><div class="flex align-items-center justify-content-center">
+              No games created.
+            </div></template
+          >
         </DataTable>
       </template>
     </Card>
@@ -58,14 +63,16 @@ const addGame = async (game) => {
 const deleteGame = (game) => {
   confirm.require({
     message: 'Do you want to delete this game?',
-    rejectLabel: 'Cancel',
-    acceptLabel: 'Delete',
+    rejectLabel: 'Delete',
+    acceptLabel: 'Cancel',
     header: `Delete ${game.name}`,
-    acceptProps: {
-      label: 'Delete',
+    rejectProps: {
       severity: 'danger',
     },
-    accept: () => deleteGameConfirmed(game.id),
+    acceptProps: {
+      severity: 'secondary',
+    },
+    reject: () => deleteGameConfirmed(game.id),
   })
 }
 

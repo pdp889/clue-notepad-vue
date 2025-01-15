@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div>
     <Card>
       <template #title>
         <div class="flex align-items-center justify-content-between">
@@ -30,6 +30,11 @@
               </div>
             </template>
           </Column>
+          <template #empty>
+            <div class="flex align-items-center justify-content-center">
+              No hands created.
+            </div></template
+          >
         </DataTable>
       </template>
     </Card>
@@ -57,31 +62,35 @@ const emit = defineEmits(['fetchHands'])
 
 const addHand = async (hand) => {
   await HandService.create(game.id, hand)
+  toast.add({ severity: 'success', summary: 'Hand Added', life: 3000 })
   fetchHands()
 }
 
 const editHand = async (data) => {
   await HandService.update(data.id, data)
+  toast.add({ severity: 'success', summary: 'Hand Updated', life: 3000 })
   fetchHands()
 }
 
 const deleteHand = (handId) => {
   confirm.require({
     message: 'Do you want to delete this hand?',
-    rejectLabel: 'Cancel',
-    acceptLabel: 'Delete',
-    header: 'Confirmation',
-    acceptProps: {
-      label: 'Delete',
+    rejectLabel: 'Delete',
+    acceptLabel: 'Cancel',
+    header: 'Delete Confirmation',
+    rejectProps: {
       severity: 'danger',
     },
-    accept: () => deleteHandConfirmed(handId),
+    acceptProps: {
+      severity: 'secondary',
+    },
+    reject: () => deleteHandConfirmed(handId),
   })
 }
 
 const deleteHandConfirmed = async (handId) => {
   await HandService.delete(handId)
-  toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 })
+  toast.add({ severity: 'success', summary: 'Hand Deleted', life: 3000 })
   fetchHands()
 }
 
