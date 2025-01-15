@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -14,5 +14,4 @@ const route = useRoute()
 const gameId = computed(() => {
   return route.params.id
 })
-
 </script>

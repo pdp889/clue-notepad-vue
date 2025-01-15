@@ -1,15 +1,13 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import StoreInit from './stores/StoreInit.vue';
-
+import StoreInit from './stores/StoreInit.vue'
 </script>
 
 <template>
   <RouterView />
   <Suspense>
-       <StoreInit />
+    <StoreInit />
   </Suspense>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

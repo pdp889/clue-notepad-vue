@@ -1,7 +1,7 @@
 <template>
-    <GameTable />
+  <GameTable />
 </template>
 
 <script setup>
-  import GameTable from "@/components/GameTable.vue";
+import GameTable from '@/components/GameTable.vue'
 </script>
