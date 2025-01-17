@@ -1,35 +1,23 @@
-# clue-notepad-vue
+# Clue Notepad Application
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue.js application for tracking your Clue game deductions. Basic UI for the Clue Notepad Backend.
 
-## Recommended IDE Setup
+## Tech Stack
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Vue 3
+- Pinia for state management
+- PrimeVue for UI components
+- PrimeFlex for CSS utilities
+- Vite
 
-## Customize configuration
+## Development Setup
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
+# Install dependencies
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# Run development server
 npm run dev
-```
 
-### Compile and Minify for Production
-
-```sh
+# Build for production
 npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
