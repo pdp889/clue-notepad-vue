@@ -5,16 +5,6 @@ const apiClient = axios.create({
 })
 
 class CardService {
-  async getCardTypes() {
-    try {
-      const response = await apiClient.get('/types')
-      return response.data
-    } catch (error) {
-      console.error('Error fetching hands:', error)
-      throw error
-    }
-  }
-
   async getCardCategories() {
     try {
       const response = await apiClient.get('/categories')

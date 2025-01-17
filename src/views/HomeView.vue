@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import GameTable from '@/components/GameTable.vue'
+import GameTable from '@/components/game/GameTable.vue'
 </script>

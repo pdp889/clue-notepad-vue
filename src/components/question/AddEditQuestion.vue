@@ -81,8 +81,6 @@ import { computed, ref, watch } from 'vue'
 import { useCardStore } from '@/stores/cardStore'
 import { PrimeIcons } from '@primevue/core/api'
 
-const emit = defineEmits(['questionUpdated'])
-
 const visible = ref(false)
 const editable = ref({})
 const cardStore = useCardStore()
@@ -92,15 +90,6 @@ const { question, isAdd, hands } = defineProps({
   isAdd: Boolean,
   hands: Array,
 })
-
-watch(
-  () => editable.value.showingCard,
-  (showingCard) => {
-    if (!showingCard) {
-      editable.value.cardTypeShown = null
-    }
-  },
-)
 
 const title = computed(() => {
   if (isAdd) {
@@ -116,6 +105,15 @@ const icon = computed(() => {
   return PrimeIcons.PENCIL
 })
 
+watch(
+  () => editable.value.showingCard,
+  (showingCard) => {
+    if (!showingCard) {
+      editable.value.cardTypeShown = null
+    }
+  },
+)
+
 const handOptions = computed(() => {
   return hands.filter((h) => !(h.cards?.length > 0))
 })
@@ -125,16 +123,17 @@ const show = () => {
   visible.value = true
 }
 
+const emit = defineEmits(['questionUpdated'])
 const ok = () => {
   emit('questionUpdated', editable.value)
   visible.value = false
 }
 
-const canSave = computed(() => {
-  return !!editable.value.hand && !!editable.value.cardTypes && threeCardsSelected.value
-})
-
 const threeCardsSelected = computed(() => {
   return editable.value.cardTypes?.length == 3
+})
+
+const canSave = computed(() => {
+  return !!editable.value.hand && !!editable.value.cardTypes && threeCardsSelected.value
 })
 </script>

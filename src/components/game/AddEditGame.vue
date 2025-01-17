@@ -22,8 +22,6 @@
 import { computed, ref } from 'vue'
 import { PrimeIcons } from '@primevue/core/api'
 
-const emit = defineEmits(['gameUpdated'])
-
 const visible = ref(false)
 const editable = ref({})
 
@@ -51,6 +49,7 @@ const show = () => {
   visible.value = true
 }
 
+const emit = defineEmits(['gameUpdated'])
 const ok = () => {
   emit('gameUpdated', editable.value)
   visible.value = false

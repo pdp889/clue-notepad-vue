@@ -40,11 +40,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import GameService from '@/services/game.service.js'
-import AddEditGame from './AddEditGame.vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 import { RouterLink } from 'vue-router'
 import { PrimeIcons } from '@primevue/core/api'
+import AddEditGame from './AddEditGame.vue'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -53,6 +53,10 @@ const games = ref()
 const fetchGames = async () => {
   games.value = await GameService.getGames()
 }
+
+onMounted(() => {
+  fetchGames()
+})
 
 const addGame = async (game) => {
   await GameService.create(game)
@@ -81,8 +85,4 @@ const deleteGameConfirmed = async (gameId) => {
   toast.add({ severity: 'success', summary: 'Game Deleted', life: 3000 })
   fetchGames()
 }
-
-onMounted(() => {
-  fetchGames()
-})
 </script>

@@ -56,14 +56,19 @@ import { computed } from 'vue'
 
 const confirm = useConfirm()
 const toast = useToast()
+const cardStore = useCardStore()
 
 const { game, hands } = defineProps({
   game: Object,
   hands: Array,
 })
-const cardStore = useCardStore()
+
+const userAlreadyPresent = computed(() => {
+  return hands.some((h) => h.cards?.length > 0)
+})
 
 const emit = defineEmits(['handsUpdated'])
+const fetchHands = () => emit('handsUpdated')
 
 const addHand = async (hand) => {
   await HandService.create(game.id, hand)
@@ -76,10 +81,6 @@ const editHand = async (data) => {
   toast.add({ severity: 'success', summary: 'Hand Updated', life: 3000 })
   fetchHands()
 }
-
-const userAlreadyPresent = computed(() => {
-  return hands.some((h) => h.cards?.length > 0)
-})
 
 const deleteHand = (handId) => {
   confirm.require({
@@ -101,9 +102,5 @@ const deleteHandConfirmed = async (handId) => {
   await HandService.delete(handId)
   toast.add({ severity: 'success', summary: 'Hand Deleted', life: 3000 })
   fetchHands()
-}
-
-const fetchHands = () => {
-  emit('handsUpdated')
 }
 </script>

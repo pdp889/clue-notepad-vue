@@ -68,14 +68,13 @@ import { PrimeIcons } from '@primevue/core/api'
 
 const confirm = useConfirm()
 const toast = useToast()
+const cardStore = useCardStore()
 
 const { game, hands } = defineProps({
   hands: Array,
   questions: Object,
   game: Object,
 })
-
-const cardStore = useCardStore()
 
 const emit = defineEmits(['questionsUpdated'])
 const fetchQuestions = () => emit('questionsUpdated')

@@ -47,14 +47,14 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import GameService from '@/services/game.service.js'
-import AddEditGame from '../components/AddEditGame.vue'
-import HandTable from './HandTable.vue'
+import AddEditGame from './game/AddEditGame.vue'
+import HandTable from './hand/HandTable.vue'
 import HandService from '@/services/hand.service'
 import questionService from '@/services/question.service'
-import QuestionTable from './QuestionTable.vue'
+import QuestionTable from './question/QuestionTable.vue'
 import { PrimeIcons } from '@primevue/core/api'
 import { useToast } from 'primevue'
-import Board from './BoardTable.vue'
+import Board from './board/BoardTable.vue'
 
 const toast = useToast()
 const game = ref()

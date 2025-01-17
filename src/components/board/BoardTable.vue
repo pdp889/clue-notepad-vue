@@ -23,11 +23,11 @@ import { useCardStore } from '@/stores/cardStore'
 import { computed } from 'vue'
 import { PrimeIcons } from '@primevue/core/api'
 
+const cardStore = useCardStore()
+
 const { board } = defineProps({
   board: Object,
 })
-
-const cardStore = useCardStore()
 
 const rows = computed(() => {
   let labels = Object.values(cardStore.cardLabelLookup)

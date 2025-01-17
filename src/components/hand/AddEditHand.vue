@@ -61,8 +61,6 @@ import { computed, ref } from 'vue'
 import { PrimeIcons } from '@primevue/core/api'
 import { useCardStore } from '@/stores/cardStore'
 
-const emit = defineEmits(['handUpdated'])
-
 const visible = ref(false)
 const editable = ref({})
 const cardStore = useCardStore()
@@ -91,6 +89,7 @@ const show = () => {
   visible.value = true
 }
 
+const emit = defineEmits(['handUpdated'])
 const ok = () => {
   emit('handUpdated', editable.value)
   visible.value = false
