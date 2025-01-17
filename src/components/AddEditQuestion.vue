@@ -6,7 +6,7 @@
       <label class="font-semibold w-2">Hand:</label>
       <Select
         v-model="editable.hand"
-        :options="hands"
+        :options="handOptions"
         optionLabel="playerName"
         placeholder="Select Hand"
         class="w-8"
@@ -28,7 +28,7 @@
         :show-toggle-all="false"
         scroll-height="30rem"
         class="w-8"
-        maxSelectedLabels="3"
+        :maxSelectedLabels="3"
         :invalid="!editable.cardTypes || !threeCardsSelected"
       >
         <template #optiongroup="slotProps">
@@ -114,6 +114,10 @@ const icon = computed(() => {
     return PrimeIcons.PLUS
   }
   return PrimeIcons.PENCIL
+})
+
+const handOptions = computed(() => {
+  return hands.filter((h) => !(h.cards?.length > 0))
 })
 
 const show = () => {

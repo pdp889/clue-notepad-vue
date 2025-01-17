@@ -22,17 +22,18 @@
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <div>TODO</div>
+              <Board :board="board" v-if="hands && hands.length >= 2" />
+              <div v-else>Board will display when at least 2 hands are added.</div>
             </TabPanel>
             <TabPanel value="1">
-              <HandTable :game="game" :hands="hands" @fetch-hands="fetchHands" />
+              <HandTable :game="game" :hands="hands" @hands-updated="handsUpdated" />
             </TabPanel>
             <TabPanel value="2">
               <QuestionTable
                 :hands="hands"
                 :game="game"
                 :questions="questions"
-                @fetch-questions="fetchQuestions"
+                @questions-updated="questionsUpdated"
               />
             </TabPanel>
           </TabPanels>
@@ -53,11 +54,13 @@ import questionService from '@/services/question.service'
 import QuestionTable from './QuestionTable.vue'
 import { PrimeIcons } from '@primevue/core/api'
 import { useToast } from 'primevue'
+import Board from './BoardTable.vue'
 
 const toast = useToast()
 const game = ref()
 const hands = ref()
 const questions = ref()
+const board = ref()
 
 const { gameId } = defineProps({
   gameId: String,
@@ -66,23 +69,32 @@ const { gameId } = defineProps({
 const editGame = async (data) => {
   await GameService.update(gameId, data)
   toast.add({ severity: 'success', summary: 'Game Updated', life: 3000 })
-  fetchGame(gameId)
+  fetch({ GAME: true })
 }
 
-const fetchGame = async () => {
-  game.value = await GameService.getGame(gameId)
+const handsUpdated = async () => {
+  return fetch({ HANDS: true, QUESTIONS: true, BOARD: true })
 }
 
-const fetchHands = async () => {
-  hands.value = await HandService.getHands(gameId)
-  fetchQuestions()
-}
-
-const fetchQuestions = async () => {
-  questions.value = await questionService.getQuestions(gameId)
+const questionsUpdated = async () => {
+  return fetch({ QUESTIONS: true, BOARD: true })
 }
 
 onMounted(() => {
-  Promise.all([fetchHands(), fetchGame()])
+  fetch({ HANDS: true, QUESTIONS: true, BOARD: true, GAME: true })
 })
+
+const fetch = async (items) => {
+  const results = await Promise.all([
+    items.GAME ? GameService.getGame(gameId) : Promise.resolve(null),
+    items.HANDS ? HandService.getHands(gameId) : Promise.resolve(null),
+    items.QUESTIONS ? questionService.getQuestions(gameId) : Promise.resolve(null),
+    items.BOARD ? GameService.getBoard(gameId) : Promise.resolve(null),
+  ])
+
+  if (items.GAME) game.value = results[0]
+  if (items.HANDS) hands.value = results[1]
+  if (items.QUESTIONS) questions.value = results[2]
+  if (items.BOARD) board.value = results[3]
+}
 </script>

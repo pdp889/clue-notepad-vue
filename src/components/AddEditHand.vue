@@ -1,6 +1,9 @@
 <template>
   <Button :icon="icon" @click="show" />
   <Dialog v-model:visible="visible" modal :header="title" :style="{ width: '25%' }">
+    <div v-if="isUser" class="flex items-center gap-4 mb-4">
+      <Message>Add yourself, and your cards.</Message>
+    </div>
     <div class="flex items-center gap-4 mb-4">
       <label for="playerName" class="font-semibold w-2">Player Name:</label>
       <InputText
@@ -11,23 +14,17 @@
         :invalid="!editable.playerName"
       />
     </div>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 mb-4" v-if="!isUser">
       <label for="cardCount" class="font-semibold w-2"> Card Count:</label>
       <InputNumber
         v-model="editable.cardCount"
         inputId="cardCount"
         autocomplete="off"
         class="w-8"
-        :invalid="cardCountInvalid || !editable.cardCount"
+        :invalid="!editable.cardCount"
       />
     </div>
-    <div class="flex items-center gap-4 mb-4">
-      <div class="w-2"></div>
-      <span v-if="cardCountInvalid" class="w-8 mt-2" style="color: red">
-        Card Count must match number of cards chosen.
-      </span>
-    </div>
-    <div class="flex items-center gap-4 mb-4">
+    <div class="flex items-center gap-4 mb-4" v-if="isUser">
       <label for="cards" class="font-semibold w-2">Cards:</label>
       <MultiSelect
         input-id="cards"
@@ -42,7 +39,8 @@
         :show-toggle-all="false"
         scroll-height="30rem"
         class="w-8"
-        maxSelectedLabels="3"
+        :maxSelectedLabels="3"
+        :invalid="!editable.cards || editable.cards.length == 0"
       >
         <template #optiongroup="slotProps">
           <div class="flex items-center">
@@ -69,16 +67,16 @@ const visible = ref(false)
 const editable = ref({})
 const cardStore = useCardStore()
 
-const { hand, isAdd } = defineProps({
+const { hand, isAdd, isUser } = defineProps({
   hand: Object,
   isAdd: Boolean,
+  isUser: Boolean,
 })
 
 const title = computed(() => {
-  if (isAdd) {
-    return 'Add Hand'
-  }
-  return 'Edit Hand'
+  let text = isAdd ? 'Add ' : 'Edit '
+  text += isUser ? 'User' : 'Hand'
+  return text
 })
 
 const icon = computed(() => {
@@ -97,14 +95,10 @@ const ok = () => {
   emit('handUpdated', editable.value)
   visible.value = false
 }
-
-const cardCountInvalid = computed(() => {
-  const cardCount = editable.value.cardCount || 0
-  const cardTypesLength = editable.value.cards?.length || cardCount
-  return cardTypesLength != cardCount
-})
-
 const canSave = computed(() => {
-  return !!editable.value.cardCount && !!editable.value.playerName && !cardCountInvalid.value
+  if (isUser) {
+    return !!editable.value.playerName && editable.value.cards?.length > 0
+  }
+  return !!editable.value.cardCount && !!editable.value.playerName
 })
 </script>

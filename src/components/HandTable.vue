@@ -4,7 +4,7 @@
       <template #title>
         <div class="flex align-items-center justify-content-between">
           <span>Hands</span>
-          <AddEditHand isAdd @hand-updated="addHand"></AddEditHand>
+          <AddEditHand isAdd @hand-updated="addHand" :is-user="!userAlreadyPresent"></AddEditHand>
         </div>
       </template>
       <template #content>
@@ -21,7 +21,11 @@
           <Column field="actions" header="Actions" class="w-2">
             <template #body="{ data }">
               <div class="flex align-items-center justify-content-end gap-2">
-                <AddEditHand @hand-updated="editHand" :hand="data"></AddEditHand>
+                <AddEditHand
+                  @hand-updated="editHand"
+                  :hand="data"
+                  :is-user="data.cards && data.cards.length > 0"
+                ></AddEditHand>
                 <Button
                   @click="deleteHand(data.id)"
                   severity="danger"
@@ -48,6 +52,7 @@ import HandService from '@/services/hand.service'
 import AddEditHand from './AddEditHand.vue'
 import { useCardStore } from '@/stores/cardStore'
 import { PrimeIcons } from '@primevue/core/api'
+import { computed } from 'vue'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -58,7 +63,7 @@ const { game, hands } = defineProps({
 })
 const cardStore = useCardStore()
 
-const emit = defineEmits(['fetchHands'])
+const emit = defineEmits(['handsUpdated'])
 
 const addHand = async (hand) => {
   await HandService.create(game.id, hand)
@@ -71,6 +76,10 @@ const editHand = async (data) => {
   toast.add({ severity: 'success', summary: 'Hand Updated', life: 3000 })
   fetchHands()
 }
+
+const userAlreadyPresent = computed(() => {
+  return hands.some((h) => h.cards?.length > 0)
+})
 
 const deleteHand = (handId) => {
   confirm.require({
@@ -95,6 +104,6 @@ const deleteHandConfirmed = async (handId) => {
 }
 
 const fetchHands = () => {
-  emit('fetchHands')
+  emit('handsUpdated')
 }
 </script>

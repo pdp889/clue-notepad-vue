@@ -32,6 +32,7 @@
                 v-if="data.cardTypeShown"
                 :label="cardStore.cardLabelLookup[data.cardTypeShown]"
               ></Chip>
+              <span v-else-if="data.showingCard">Unknown</span>
             </template>
           </Column>
           <Column field="actions" header="Actions" class="w-2">
@@ -76,8 +77,8 @@ const { game, hands } = defineProps({
 
 const cardStore = useCardStore()
 
-const emit = defineEmits(['fetchQuestions'])
-const fetchQuestions = () => emit('fetchQuestions')
+const emit = defineEmits(['questionsUpdated'])
+const fetchQuestions = () => emit('questionsUpdated')
 
 const addQuestion = async (question) => {
   await questionService.create(game.id, question)

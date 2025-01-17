@@ -54,6 +54,16 @@ class GameService {
       throw error
     }
   }
+
+  async getBoard(id) {
+    try {
+      const response = await apiClient.get(`/${id}/board`)
+      return response.data
+    } catch (error) {
+      console.error('Error fetching game:', error)
+      throw error
+    }
+  }
 }
 
 export default new GameService()

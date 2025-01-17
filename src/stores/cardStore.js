@@ -5,6 +5,7 @@ export const useCardStore = defineStore('card', {
   state: () => ({
     cardCategories: [],
     cardLabelLookup: {},
+    cardTypes: [],
     error: null,
   }),
   actions: {
@@ -17,6 +18,7 @@ export const useCardStore = defineStore('card', {
             .flatMap((category) => category.cardTypes)
             .forEach((type) => {
               this.cardLabelLookup[type.value] = type.label
+              this.cardTypes.push(type.value)
             })
         } catch (error) {
           console.error('Error fetching card categories:', error)
