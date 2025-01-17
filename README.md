@@ -10,7 +10,7 @@ A Vue.js application for tracking your Clue game deductions. Basic UI for the Cl
 - PrimeFlex for CSS utilities
 - Vite
 
-## Development Setup
+## Running the Application
 
 ```bash
 # Install dependencies
@@ -18,6 +18,3 @@ npm install
 
 # Run development server
 npm run dev
-
-# Build for production
-npm run build
